@@ -72,8 +72,8 @@ export function ProductForm({ product }: ProductFormProps) {
       }
 
       const url = product
-        ? `https://api.bitechx.com/products/${product.id}`
-        : "https://api.bitechx.com/products"
+        ? `${process.env.NEXT_PUBLIC_API_URL}/products/${product.id}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/products`
 
       const method = product ? "PUT" : "POST"
 
@@ -112,7 +112,7 @@ export function ProductForm({ product }: ProductFormProps) {
 
     setDeleting(true)
     try {
-      const response = await fetch(`https://api.bitechx.com/products/${product.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${product.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

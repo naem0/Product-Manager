@@ -27,7 +27,7 @@ export function LoginForm() {
     setLoading(true)
 
     try {
-      const response = await fetch("https://api.bitechx.com/auth", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

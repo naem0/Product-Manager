@@ -26,49 +26,49 @@ export default function ProductsPage() {
   useEffect(() => {
     if (!token) return
 
-    const fetchCategories = async () => {
+const fetchCategories = async () => {
       try {
-        const response = await fetch("https://api.bitechx.com/categories", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
+        });
         if (response.ok) {
-          const data = await response.json()
-          dispatch(setCategories(data))
-          console.log("Fetched categories:", data)
+          const data = await response.json();
+          dispatch(setCategories(data));
+          console.log("Fetched categories:", data);
         }
       } catch (err) {
-        console.error("Failed to fetch categories:", err)
+        console.error("Failed to fetch categories:", err);
       }
-    }
+    };
 
-    fetchCategories()
-  }, [token, dispatch])
+    fetchCategories();
+  }, [token, dispatch]);
 
   useEffect(() => {
     if (!token) {
-      router.push("/login")
-      return
+      router.push("/login");
+      return;
     }
 
     const fetchProducts = async () => {
-      dispatch(setLoading(true))
+      dispatch(setLoading(true));
       try {
         const params = new URLSearchParams({
           offset: currentPage.toString(),
           limit: "12"
-        })
+        });
 
         if (searchQuery) {
-          params.append("search", searchQuery)
+          params.append("search", searchQuery);
         }
 
         if (selectedCategoryId) {
-          params.append("categoryId", selectedCategoryId)
+          params.append("categoryId", selectedCategoryId);
         }
 
-        const response = await fetch(`https://api.bitechx.com/products?${params.toString()}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?${params.toString()}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

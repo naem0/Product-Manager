@@ -26,7 +26,7 @@ export default function EditProductPage() {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://api.bitechx.com/products/${params.slug}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.slug}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

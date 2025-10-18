@@ -45,7 +45,7 @@ export default function ProductDetailsPage() {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://api.bitechx.com/products/${params.slug}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.slug}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -82,7 +82,7 @@ export default function ProductDetailsPage() {
 
     setDeleting(true)
     try {
-      const response = await fetch(`https://api.bitechx.com/products/${product.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${product.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
