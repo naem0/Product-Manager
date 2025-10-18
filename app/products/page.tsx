@@ -59,7 +59,7 @@ const fetchCategories = async () => {
         const endpoint = searchQuery ? `${baseUrl}/products/search` : `${baseUrl}/products`;
 
         const params = new URLSearchParams({
-          offset: currentPage.toString(),
+          offset: ((currentPage - 1) * 12).toString(),
           limit: "12"
         });
 
@@ -88,16 +88,7 @@ const fetchCategories = async () => {
         }
 
         const data = await response.json()
-        if (Array.isArray(data)) {
-          dispatch(setProducts(data))
-          dispatch(setTotalPages(1))
-        } else if (data && typeof data === 'object' && Array.isArray(data.products)) {
-          dispatch(setProducts(data.products))
-          dispatch(setTotalPages(data.totalPages || 1))
-        } else {
-          dispatch(setProducts([]))
-          dispatch(setTotalPages(1))
-        }
+        dispatch(setProducts(data))
       } catch (err) {
         dispatch(setError(err instanceof Error ? err.message : "An error occurred"))
       }

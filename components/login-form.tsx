@@ -18,7 +18,6 @@ export function LoginForm() {
   const { toast } = useToast()
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
   })
   const [loading, setLoading] = useState(false)
 
@@ -76,18 +75,6 @@ export function LoginForm() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>

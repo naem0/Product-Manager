@@ -12,7 +12,6 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Product Manager",
   description: "Manage your products with ease",
-  generator: "v0.app",
 }
 
 export default function RootLayout({
