@@ -14,10 +14,7 @@ import {
 
 export function ProductsPagination() {
   const dispatch = useAppDispatch()
-  const { currentPage, items } = useAppSelector((state) => state.products)
-
-  // Calculate total pages based on items (assuming 12 per page)
-  const totalPages = Math.ceil(items.length / 12) || 1
+  const { currentPage, totalPages } = useAppSelector((state) => state.products)
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {

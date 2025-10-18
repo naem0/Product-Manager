@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks"
-import { setProducts, setLoading, setError } from "@/lib/redux/slices/products-slice"
+import { setProducts, setLoading, setError, setTotalPages } from "@/lib/redux/slices/products-slice"
 import { setCategories } from "@/lib/redux/slices/categories-slice"
 import { logout } from "@/lib/redux/slices/auth-slice"
 import { useRouter } from "next/navigation"
@@ -55,20 +55,23 @@ const fetchCategories = async () => {
     const fetchProducts = async () => {
       dispatch(setLoading(true));
       try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+        const endpoint = searchQuery ? `${baseUrl}/products/search` : `${baseUrl}/products`;
+
         const params = new URLSearchParams({
           offset: currentPage.toString(),
           limit: "12"
         });
 
         if (searchQuery) {
-          params.append("search", searchQuery);
+          params.append("searchedText", searchQuery);
         }
 
         if (selectedCategoryId) {
           params.append("categoryId", selectedCategoryId);
         }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?${params.toString()}`, {
+        const response = await fetch(`${endpoint}?${params.toString()}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -85,7 +88,16 @@ const fetchCategories = async () => {
         }
 
         const data = await response.json()
-        dispatch(setProducts(data))
+        if (Array.isArray(data)) {
+          dispatch(setProducts(data))
+          dispatch(setTotalPages(1))
+        } else if (data && typeof data === 'object' && Array.isArray(data.products)) {
+          dispatch(setProducts(data.products))
+          dispatch(setTotalPages(data.totalPages || 1))
+        } else {
+          dispatch(setProducts([]))
+          dispatch(setTotalPages(1))
+        }
       } catch (err) {
         dispatch(setError(err instanceof Error ? err.message : "An error occurred"))
       }
@@ -137,7 +149,7 @@ const fetchCategories = async () => {
               </div>
             ))}
           </div>
-        ) : items.length === 0 ? (
+        ) : items?.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg mb-4">No products found</p>
             <Button onClick={() => router.push("/products/new")}>
@@ -148,7 +160,7 @@ const fetchCategories = async () => {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-              {items.map((product) => (
+              {items?.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
